@@ -17,7 +17,7 @@ export default function Navbar({ cartCount, onSearch, onOpenCart, onOpenSell }: 
           <div className="flex items-center flex-shrink-0">
             <div className="flex items-center gap-3">
               <img 
-                src="https://145102638.cdn6.editmysite.com/uploads/1/4/5/1/145102638/QX5QZMACPVBAJPHIVVKRWDDT.jpeg"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIxCuAUyRRHidM5fkxas8usGE95jMSLhbY2Q&s"
                 alt="SBU Logo" 
                 className="h-10 w-auto"
               />
