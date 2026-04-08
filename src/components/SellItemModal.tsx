@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Camera, DollarSign, Tag, FileText } from 'lucide-react';
+import { X, Camera, DollarSign, Tag, FileText, Upload, Trash2 } from 'lucide-react';
 import { CATEGORIES } from '../data';
 
 interface SellItemModalProps {
@@ -16,11 +16,41 @@ export default function SellItemModal({ isOpen, onClose }: SellItemModalProps) {
     description: '',
     condition: 'Good'
   });
+  const [image, setImage] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageChange = (file: File) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImage(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleImageChange(file);
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const onDragLeave = () => {
+    setIsDragging(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would send data to a backend
     alert('Item posted successfully! (Demo only)');
+    setImage(null);
     onClose();
   };
 
@@ -39,9 +69,9 @@ export default function SellItemModal({ isOpen, onClose }: SellItemModalProps) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed inset-0 m-auto w-full max-w-lg h-fit bg-white rounded-2xl shadow-2xl z-[110] overflow-hidden"
+            className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[90vh] bg-white rounded-2xl shadow-2xl z-[110] overflow-hidden flex flex-col"
           >
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-sbu-red text-white">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-sbu-red text-white flex-shrink-0">
               <h2 className="text-xl font-bold">Post an Item for Sale</h2>
               <button 
                 onClick={onClose}
@@ -51,12 +81,68 @@ export default function SellItemModal({ isOpen, onClose }: SellItemModalProps) {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {/* Image Upload Placeholder */}
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:border-sbu-red/50 transition-colors cursor-pointer bg-gray-50">
-                <Camera className="h-8 w-8 text-gray-400" />
-                <span className="text-sm font-medium text-gray-500">Add Photos</span>
-                <span className="text-xs text-gray-400">Drag and drop or click to upload</span>
+            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
+              {/* Image Upload Area */}
+              <div
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onClick={() => fileInputRef.current?.click()}
+                className={`relative border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all cursor-pointer min-h-[160px] ${
+                  isDragging 
+                    ? 'border-sbu-red bg-sbu-red/5' 
+                    : image 
+                      ? 'border-gray-200 bg-white' 
+                      : 'border-gray-200 bg-gray-50 hover:border-sbu-red/50'
+                }`}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => e.target.files?.[0] && handleImageChange(e.target.files[0])}
+                  accept="image/*"
+                  className="hidden"
+                />
+
+                {image ? (
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden group">
+                    <img src={image} alt="Preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current?.click();
+                          }}
+                          className="p-2 bg-white rounded-full text-gray-700 hover:text-sbu-red transition-colors"
+                        >
+                          <Upload className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setImage(null);
+                          }}
+                          className="p-2 bg-white rounded-full text-gray-700 hover:text-red-600 transition-colors"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="p-3 bg-white rounded-full shadow-sm">
+                      <Camera className={`h-8 w-8 ${isDragging ? 'text-sbu-red' : 'text-gray-400'}`} />
+                    </div>
+                    <div className="text-center">
+                      <span className="block text-sm font-bold text-gray-700">Add Photos</span>
+                      <span className="text-xs text-gray-400">Drag and drop or click to upload</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="space-y-4">
