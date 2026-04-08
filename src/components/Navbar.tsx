@@ -1,5 +1,6 @@
 import { ShoppingCart, User, Search, Menu, Plus } from 'lucide-react';
 import { motion } from 'motion/react';
+import sbuLogo from '../Stony_Brook_University Logo.png';
 
 interface NavbarProps {
   cartCount: number;
@@ -17,10 +18,9 @@ export default function Navbar({ cartCount, onSearch, onOpenCart, onOpenSell }: 
           <div className="flex items-center flex-shrink-0">
             <div className="flex items-center gap-3">
               <img 
-                src="https://www.stonybrook.edu/commcms/brand/_images/logo/shield.png" 
+                src={sbuLogo} 
                 alt="SBU Logo" 
                 className="h-10 w-auto"
-                referrerPolicy="no-referrer"
               />
               <span className="hidden md:block text-xl font-black tracking-tighter text-sbu-red uppercase">
                 Stony Brook <span className="text-sbu-black">Marketplace</span>
