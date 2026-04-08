@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShoppingBag, X, Trash2, Plus, Minus } from 'lucide-react';
+import { ShoppingBag, X, Trash2 } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ProductCard from './components/ProductCard';
@@ -30,11 +30,7 @@ export default function App() {
   const addToCart = (product: Product) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
+      if (existing) return prev;
       return [...prev, { ...product, quantity: 1 }];
     });
     setIsCartOpen(true);
@@ -44,20 +40,8 @@ export default function App() {
     setCart((prev) => prev.filter((item) => item.id !== productId));
   };
 
-  const updateQuantity = (productId: string, delta: number) => {
-    setCart((prev) =>
-      prev.map((item) => {
-        if (item.id === productId) {
-          const newQty = Math.max(1, item.quantity + delta);
-          return { ...item, quantity: newQty };
-        }
-        return item;
-      })
-    );
-  };
-
-  const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
+  const cartCount = cart.length;
 
   return (
     <div className="min-h-screen bg-white font-sans">
@@ -233,28 +217,12 @@ export default function App() {
                           ${item.price}
                         </p>
                         <div className="flex items-center gap-3 mt-2">
-                          <div className="flex items-center border border-gray-200 rounded-md">
-                            <button 
-                              onClick={() => updateQuantity(item.id, -1)}
-                              className="p-1 hover:bg-gray-50"
-                            >
-                              <Minus className="h-3 w-3" />
-                            </button>
-                            <span className="w-8 text-center text-xs font-medium">
-                              {item.quantity}
-                            </span>
-                            <button 
-                              onClick={() => updateQuantity(item.id, 1)}
-                              className="p-1 hover:bg-gray-50"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </button>
-                          </div>
                           <button 
                             onClick={() => removeFromCart(item.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
+                            className="flex items-center gap-1.5 text-gray-400 hover:text-red-500 transition-colors text-xs font-medium"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Remove
                           </button>
                         </div>
                       </div>

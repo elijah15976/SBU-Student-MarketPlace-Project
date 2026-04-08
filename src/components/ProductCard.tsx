@@ -1,14 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../types';
-import { ShoppingCart, Heart } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ShoppingCart, Heart, MoreHorizontal, Flag, EyeOff } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
 }
 
+const ActionMenuItem = ({ 
+  icon: Icon, 
+  activeIcon: ActiveIcon,
+  label, 
+  isActive,
+  colorClass = "text-gray-700", 
+  activeColorClass = "text-sbu-red",
+  hoverText = "hover:text-sbu-red" 
+}: { 
+  icon: any, 
+  activeIcon?: any,
+  label: string, 
+  isActive?: boolean,
+  colorClass?: string, 
+  activeColorClass?: string,
+  hoverText?: string 
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const DisplayIcon = (isActive && ActiveIcon) ? ActiveIcon : Icon;
+
+  return (
+    <motion.button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`flex items-center gap-2 p-2 rounded-full bg-white shadow-md border border-gray-100 transition-all duration-300 ${isActive ? activeColorClass : colorClass} ${hoverText} relative z-20`}
+    >
+      <DisplayIcon className="h-4 w-4 shrink-0" />
+      <AnimatePresence>
+        {isHovered && (
+          <motion.span
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: "auto", opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            className="overflow-hidden whitespace-nowrap text-xs font-bold pr-2"
+          >
+            {label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+};
+
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <motion.div 
       layout
@@ -26,11 +71,41 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute top-2 right-2">
-          <button className="p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-600 hover:text-sbu-red transition-colors shadow-sm">
-            <Heart className="h-4 w-4" />
-          </button>
+        
+        {/* Action Menu */}
+        <div 
+          className="absolute top-2 right-2 z-10 flex flex-col items-end gap-2"
+          onMouseEnter={() => setIsMenuOpen(true)}
+          onMouseLeave={() => setIsMenuOpen(false)}
+        >
+          <ActionMenuItem 
+            icon={MoreHorizontal} 
+            activeIcon={Heart}
+            label="Favorite" 
+            isActive={isMenuOpen}
+          />
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col items-end gap-2"
+              >
+                <ActionMenuItem icon={EyeOff} label="Not Interested" />
+                <ActionMenuItem 
+                  icon={Flag} 
+                  label="Report" 
+                  colorClass="text-red-600" 
+                  activeColorClass="text-red-600"
+                  hoverText="hover:text-red-700" 
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
+
         <div className="absolute bottom-2 left-2">
           <span className="px-2 py-1 bg-sbu-black/60 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider rounded">
             {product.condition}
