@@ -7,7 +7,6 @@ import ProductCard from './components/ProductCard';
 import SellItemModal from './components/SellItemModal';
 import { PRODUCTS } from './data';
 import { Product, CartItem } from './types';
-import sbuLogo from './Stony_Brook_University Logo.png';
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
