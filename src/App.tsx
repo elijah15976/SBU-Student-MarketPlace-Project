@@ -7,7 +7,10 @@ import ProductCard from './components/ProductCard';
 import SellItemModal from './components/SellItemModal';
 import { PRODUCTS } from './data';
 import { Product, CartItem } from './types';
+<<<<<<< HEAD
 import sbuLogo from './Stony_Brook_University Logo.png';
+=======
+>>>>>>> 27807cf1233450c55e70a04cfb739965c086cf7b
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -142,6 +145,15 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
               <div className="flex items-center gap-3 mb-6">
+<<<<<<< HEAD
+=======
+                <img 
+                  src="./Stony_Brook_University Logo.png" 
+                  alt="SBU Logo" 
+                  className="h-8 w-auto brightness-0 invert"
+                  referrerPolicy="no-referrer"
+                />
+>>>>>>> 27807cf1233450c55e70a04cfb739965c086cf7b
                 <span className="text-lg font-black tracking-tighter uppercase">
                   Stony Brook <span className="text-sbu-red">Marketplace</span>
                 </span>
