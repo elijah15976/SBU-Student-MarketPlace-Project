@@ -8,9 +8,12 @@ import SellItemModal from './components/SellItemModal';
 import { PRODUCTS } from './data';
 import { Product, CartItem } from './types';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import sbuLogo from './Stony_Brook_University Logo.png';
 =======
 >>>>>>> 27807cf1233450c55e70a04cfb739965c086cf7b
+=======
+>>>>>>> 14c61a6000692690cd819a056f202936a0e0bdbc
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
