@@ -1,5 +1,6 @@
-import { ShoppingCart, User, Search, Menu, Plus } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { ShoppingCart, User, Search, Menu, Plus, Heart, Settings, LogOut } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   cartCount: number;
@@ -9,6 +10,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ cartCount, onSearch, onOpenCart, onOpenSell }: NavbarProps) {
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 bg-white border-b-2 border-sbu-red/10 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,9 +54,54 @@ export default function Navbar({ cartCount, onSearch, onOpenCart, onOpenSell }: 
               <Plus className="h-5 w-5" />
               <span className="hidden lg:inline">Sell Item</span>
             </button>
-            <button className="p-2 text-gray-600 hover:text-sbu-red transition-colors hidden sm:block">
-              <User className="h-6 w-6" />
-            </button>
+
+            {/* Account Menu */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setIsUserMenuOpen(true)}
+              onMouseLeave={() => setIsUserMenuOpen(false)}
+            >
+              <button className="p-2 text-gray-600 hover:text-sbu-red transition-colors hidden sm:block">
+                <User className="h-6 w-6" />
+              </button>
+
+              <AnimatePresence>
+                {isUserMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-1 z-[60]"
+                  >
+                    <div className="px-4 py-4 border-b border-gray-100 flex items-center gap-3">
+                      <div className="p-1.5 bg-gray-100 rounded-full">
+                        <User className="h-4 w-4 text-gray-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-900 uppercase tracking-wide">USER</p>
+                    </div>
+                    
+                    <div className="py-1">
+                      <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-sbu-red/5 hover:text-sbu-red transition-colors group">
+                        <Heart className="h-4 w-4" />
+                        Favorites
+                      </button>
+                      <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-sbu-red/5 hover:text-sbu-red transition-colors group">
+                        <Settings className="h-4 w-4" />
+                        Settings
+                      </button>
+                    </div>
+
+                    <div className="border-t border-gray-100 py-1">
+                      <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors group">
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <button 
               onClick={onOpenCart}
               className="p-2 text-gray-600 hover:text-sbu-red transition-colors relative"
