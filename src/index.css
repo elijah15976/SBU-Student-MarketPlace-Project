@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sbu-red: #990000;
+  --color-sbu-red-dark: #7a0000;
+  --color-sbu-black: #111111;
+  --color-sbu-grey: #f4f4f4;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-sbu-black antialiased;
+  }
+}
