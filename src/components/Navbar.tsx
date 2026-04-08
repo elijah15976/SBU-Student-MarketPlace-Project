@@ -71,13 +71,13 @@ export default function Navbar({ cartCount, onSearch, onOpenCart, onOpenSell }: 
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-1 z-[60]"
+                    className="absolute right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden py-1 z-[60]"
                   >
                     <div className="px-4 py-4 border-b border-gray-100 flex items-center gap-3">
-                      <div className="p-1.5 bg-gray-100 rounded-full">
+                      <div className="p-1.5 bg-gray-100 rounded-full flex-shrink-0">
                         <User className="h-4 w-4 text-gray-600" />
                       </div>
-                      <p className="text-sm font-medium text-gray-900 uppercase tracking-wide">USER</p>
+                      <p className="text-sm font-medium text-gray-900 uppercase tracking-wide leading-tight">STONY BROOK STUDENT</p>
                     </div>
                     
                     <div className="py-1">
